@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Encrypt</h1>
+  <form id="encrypt-form">
+    <label for="message">Message:</label>
+    <input type="text" id="message" name="message">
+    <button type="submit" id="encrypt-btn">Encrypt</button>
+  </form>
+  <div id="result"></div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  
+  <script>
+    // Render the encrypted message in the 'result' div
+    const encryptedMessage = "{{ encrypted_message }}";
+    const resultDiv = document.querySelector('#result');
+    resultDiv.textContent = `Encrypted message: ${encryptedMessage}`;
+
+    // Add copy functionality
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(encryptedMessage)
+        .then(() => alert('Message copied!'))
+        .catch((error) => console.error('Error copying message:', error));
+    });
+
+    resultDiv.appendChild(copyBtn);
+  </script>
+{% endblock %}
